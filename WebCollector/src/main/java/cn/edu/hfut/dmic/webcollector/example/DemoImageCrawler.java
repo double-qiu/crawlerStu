@@ -69,9 +69,9 @@ public class DemoImageCrawler extends BreadthCrawler {
     public static void main(String[] args) throws Exception {
         DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl", "download");
         //添加种子URL
-        demoImageCrawler.addSeed("http://weibo.cn");
+        demoImageCrawler.addSeed("https://list.jd.com/list.html?cat=670,686,690");
         //限定爬取范围
-        demoImageCrawler.addRegex("http://weibo.cn/.*");
+        demoImageCrawler.addRegex("https://list.jd.com/list.html?cat=670,686,690/.*");
         //设置为断点爬取，否则每次开启爬虫都会重新爬取
         demoImageCrawler.setResumable(true);
         demoImageCrawler.setThreads(30);

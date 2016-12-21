@@ -17,9 +17,12 @@
  */
 package cn.edu.hfut.dmic.webcollector.example;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
+import cn.edu.hfut.dmic.webcollector.util.JDBCHelper;
 
 
 /**
@@ -56,11 +59,29 @@ public class TutorialCrawler extends BreadthCrawler {
     */
     @Override
     public void visit(Page page, CrawlDatums next) {
-        if (page.matchUrl("http://blog.csdn.net/.*/article/details/.*")) {
-            String title = page.select("div[class=article_title]").first().text();
-            String author = page.select("div[id=blog_userface]").first().text();
-            System.out.println("title:" + title + "\tauthor:" + author);
-        }
+    	JdbcTemplate jdbcTemplate = null;
+    	try {
+    	    jdbcTemplate = JDBCHelper.createMysqlTemplate("mysql1",
+    	            "jdbc:mysql://localhost:3306/testdb?useUnicode=true&characterEncoding=utf8",
+    	            "root", "root", 5, 30);
+			if (jdbcTemplate != null) {
+				if (page.matchUrl("http://blog.csdn.net/.*/article/details/.*")) {
+					String title = page.select("div[class=article_title]").first().text();
+					String author = page.select("div[id=blog_userface]").first().text();
+					int updates = jdbcTemplate.update("insert into tb_content" + " (title,url) value(?,?)",
+							title, page.getUrl());
+					if (updates == 1) {
+						System.out.println("mysql插入成功");
+					}
+					System.out.println("title:" + title + "\tauthor:" + author);
+				}
+			}
+    	} catch (Exception ex) {
+    	    jdbcTemplate = null;
+    	    System.out.println("mysql未开启或JDBCHelper.createMysqlTemplate中参数配置不正确!");
+    	}
+    	
+       
     }
 
     public static void main(String[] args) throws Exception {
@@ -74,7 +95,7 @@ public class TutorialCrawler extends BreadthCrawler {
         //crawler.setRetryInterval(1000);
         
         crawler.setThreads(30);
-        crawler.start(2);
+        crawler.start(10);
     }
 
 }

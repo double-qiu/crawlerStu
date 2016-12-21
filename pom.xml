@@ -8,6 +8,7 @@
   <modules>
     	<module>WebCollector</module>
     	<module>WebMagic</module>
+    	<module>blogSearch</module>
   </modules>
     <dependencies>
         <dependency>
