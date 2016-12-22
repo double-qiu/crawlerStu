@@ -21,8 +21,8 @@ public class JDBCHelper {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-//        dataSource.setInitialSize(initialSize);
-//        dataSource.setMaxActive(maxActive);
+        dataSource.setInitialSize(initialSize);
+        dataSource.setMaxActive(maxActive);
         JdbcTemplate template = new JdbcTemplate(dataSource);
         templateMap.put(templateName, template);
         return template;

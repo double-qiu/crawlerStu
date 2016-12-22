@@ -46,7 +46,6 @@ public class TutorialCrawler extends BreadthCrawler {
     public TutorialCrawler(String crawlPath, boolean autoParse) {
         super(crawlPath, autoParse);
     }
-
     /*
         可以往next中添加希望后续爬取的任务，任务可以是URL或者CrawlDatum
         爬虫不会重复爬取任务，从2.20版之后，爬虫根据CrawlDatum的key去重，而不是URL
@@ -65,37 +64,37 @@ public class TutorialCrawler extends BreadthCrawler {
     	            "jdbc:mysql://localhost:3306/testdb?useUnicode=true&characterEncoding=utf8",
     	            "root", "root", 5, 30);
 			if (jdbcTemplate != null) {
-				if (page.matchUrl("http://blog.csdn.net/.*/article/details/.*")) {
+				if (page.matchUrl("http://blog.csdn.net/.*/article/details/.*\\#")) {
 					String title = page.select("div[class=article_title]").first().text();
-					String author = page.select("div[id=blog_userface]").first().text();
-					int updates = jdbcTemplate.update("insert into tb_content" + " (title,url) value(?,?)",
-							title, page.getUrl());
+					//String author = page.select("div[id=blog_userface]").select("span").select("a").text();
+					String author = page.select("div[id=blog_userface] span a").text();
+					System.out.println(author);
+					String url = page.getUrl();
+					int updates = jdbcTemplate.update("insert into tb_content" + " (title,url,author) value(?,?,?)",title,url,author);
 					if (updates == 1) {
 						System.out.println("mysql插入成功");
 					}
-					System.out.println("title:" + title + "\tauthor:" + author);
+					System.out.println("title:" + title + "author:" + author);
 				}
 			}
     	} catch (Exception ex) {
     	    jdbcTemplate = null;
     	    System.out.println("mysql未开启或JDBCHelper.createMysqlTemplate中参数配置不正确!");
     	}
-    	
-       
     }
 
     public static void main(String[] args) throws Exception {
         TutorialCrawler crawler = new TutorialCrawler("crawler", true);
         crawler.addSeed("http://blog.csdn.net/.*");
         crawler.addRegex("http://blog.csdn.net/.*/article/details/.*");
-        
         /*可以设置每个线程visit的间隔，这里是毫秒*/
         //crawler.setVisitInterval(1000);
         /*可以设置http请求重试的间隔，这里是毫秒*/
         //crawler.setRetryInterval(1000);
-        
+        //设置为断点爬取，否则每次开启爬虫都会重新爬取
+        crawler.setResumable(true);
         crawler.setThreads(30);
-        crawler.start(10);
+        crawler.start(20);
     }
 
 }

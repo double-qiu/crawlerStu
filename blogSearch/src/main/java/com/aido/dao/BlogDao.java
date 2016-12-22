@@ -7,6 +7,10 @@
  */
 package com.aido.dao;
 
+import java.util.List;
+
+import com.aido.vo.BlogVO;
+
 /**  
  * ClassName: BlogDao  
  * 后台数据查询
@@ -23,4 +27,14 @@ public interface BlogDao {
 	 *  @return
 	 */
 	public long getBlogTotal(String searchParam);
+
+	/**  
+	 *  getBlogPageQuery:分页查询
+	 *  @return_type:List<BlogVO>
+	 *  @author DOUBLE
+	 *  @param current
+	 *  @param rowCount
+	 *  @return  
+	 */
+	public List<BlogVO> getBlogPageQuery(int current, int rowCount,String info);
 }

@@ -174,7 +174,7 @@
 		</dependency>
   </dependencies>
   <build>
-    <finalName>bolgSearch</finalName>
+    <finalName>blogSearch</finalName>
   </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

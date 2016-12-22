@@ -7,11 +7,14 @@
  */
 package com.aido.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aido.dao.BlogDao;
 import com.aido.service.BlogService;
+import com.aido.vo.BlogVO;
 
 /**  
  * ClassName: BlogServiceImpl  
@@ -34,5 +37,17 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public long getBlogTotal(String searchParam) {
 		return blogDao.getBlogTotal(searchParam);
+	}
+
+	/**  
+	 * @param current
+	 * @param rowCount
+	 * @return
+	 * Administrator
+	 */
+	@Override
+	public List<BlogVO> getBlogPageQuery(int current, int rowCount,String info) {
+		
+		return blogDao.getBlogPageQuery(current,rowCount,info);
 	}
 }

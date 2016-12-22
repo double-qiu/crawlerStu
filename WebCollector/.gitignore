@@ -1,6 +1,7 @@
-/target
+/crawler/target
 /.settings
 .classpath
 .project
 .idea
 *.iml
+/target/
